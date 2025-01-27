@@ -4,12 +4,13 @@ import { useFrame } from "@react-three/fiber";
 
 interface FruitProps {
   fruit: string;
-  position: [number, number, number];
-  scale: [number, number, number];
-  rotation: [number, number, number];
+  position: number[];
+  scale: number[];
+  rotation: number[];
   amplitude: number;
   frequency: number;
 }
+
 const Fruit = ({
   fruit,
   position,
@@ -21,13 +22,16 @@ const Fruit = ({
   const { scene } = useGLTF(fruit);
   const ref = useRef();
 
-  // Use useFrame to update the position every frame
+  // Use useFrame to update the position and rotation every frame
   useFrame(({ clock }) => {
     const time = clock.getElapsedTime(); // Get elapsed time
-    // const amplitude = 2; // Height of the up and down movement
-    // const frequency = 1; // Speed of the movement (in cycles per second)
+
+    // Apply up and down movement (sinusoidal)
     if (ref.current) {
       ref.current.position.y = Math.sin(time * frequency) * amplitude;
+
+      // Slow horizontal rotation (around the Y-axis)
+      ref.current.rotation.y += 0.01; // Adjust the speed by changing 0.01
     }
   });
 
@@ -37,7 +41,7 @@ const Fruit = ({
       object={scene}
       position={position}
       scale={scale}
-      rotation={rotation}
+      rotation={[rotation[0], rotation[1], rotation[2]]} // Preserve initial rotation values
     />
   );
 };
