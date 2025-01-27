@@ -8,4 +8,5 @@ export default defineConfig({
   define: {
     global: "globalThis",
   },
+  assetsInclude: ["**/*.glb", "**/*.obj"], // Add this line to include .glb files
 });
